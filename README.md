@@ -1,6 +1,6 @@
 # Backend for an RSS reader that is yet to be named
 
-You can find the OpenAPI specification under `docs/`
+You can find the OpenAPI 3.0 and Swagger 3.0 specification under `docs/`
 
 ## Dev Setup
 
@@ -38,6 +38,7 @@ CSRF_ENABLED = True
 CSRF_SESSION_KEY = "secret"
 
 # Secret key for signing cookies
+SECRET_KEY = "secret"
 ```
 
 ### 2. Setup your virtual environment
@@ -52,4 +53,3 @@ virtualenv -p python3 venv
 ```bash
 python run.py
 ```
-SECRET_KEY = "secret"

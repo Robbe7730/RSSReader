@@ -1,0 +1,399 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "RSSReader",
+    "description": "API for my RSS backend",
+    "contact": {
+      "email": "robbe@robbevanherck.be"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://0.0.0.0:8080/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "feed",
+      "description": "Everything related to RSS feeds"
+    },
+    {
+      "name": "post",
+      "description": "Everything related to specific posts"
+    }
+  ],
+  "paths": {
+    "/feeds": {
+      "get": {
+        "tags": [
+          "feed"
+        ],
+        "summary": "Get all feeds",
+        "responses": {
+          "200": {
+            "description": "All feeds",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeedList"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "feed"
+        ],
+        "summary": "Add a new feed to the list",
+        "operationId": "addFeed",
+        "requestBody": {
+          "description": "Feed to be added",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeedNew"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The newly created feed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Feed"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body"
+      }
+    },
+    "/feeds/{feedId}": {
+      "get": {
+        "tags": [
+          "feed"
+        ],
+        "summary": "Get metadata about this feed",
+        "parameters": [
+          {
+            "name": "feedId",
+            "in": "path",
+            "description": "The id of the feed",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The requested feed",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeedDetail"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "feed"
+        ],
+        "summary": "Remove the feed from the list",
+        "parameters": [
+          {
+            "name": "feedId",
+            "in": "path",
+            "description": "The id of the feed",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The feed was deleted succesfully",
+            "content": {}
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "feed"
+        ],
+        "summary": "Update the feed",
+        "parameters": [
+          {
+            "name": "feedId",
+            "in": "path",
+            "description": "The id of the feed",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The updated feed",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Feed"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/feeds/{feedId}/posts": {
+      "get": {
+        "tags": [
+          "post"
+        ],
+        "summary": "Get just the posts for this feed",
+        "description": "Get just the posts for this feed",
+        "parameters": [
+          {
+            "name": "feedId",
+            "in": "path",
+            "description": "The id of the feed",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All the posts",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostList"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/feeds/{feedId}/posts/{postId}": {
+      "get": {
+        "tags": [
+          "post"
+        ],
+        "summary": "Get a specific post",
+        "parameters": [
+          {
+            "name": "feedId",
+            "in": "path",
+            "description": "The id of the feed",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "postId",
+            "in": "path",
+            "description": "The id of the post",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The requested post",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Post"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "post"
+        ],
+        "summary": "Remove the post from the feed",
+        "parameters": [
+          {
+            "name": "feedId",
+            "in": "path",
+            "description": "The id of the feed",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "postId",
+            "in": "path",
+            "description": "The id of the post",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The post was deleted succesfully",
+            "content": {}
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "post"
+        ],
+        "summary": "Update the post",
+        "parameters": [
+          {
+            "name": "feedId",
+            "in": "path",
+            "description": "The id of the feed",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "postId",
+            "in": "path",
+            "description": "The id of the post",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The updated post",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Post"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "FeedNew": {
+        "required": [
+          "name",
+          "url"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "My awesome feed"
+          },
+          "url": {
+            "type": "string",
+            "example": "https://example.com/feed.xml"
+          },
+          "priority": {
+            "type": "integer",
+            "format": "int32",
+            "example": 1,
+            "default": 1
+          },
+          "hidden": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "Feed": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FeedNew"
+          }
+        ]
+      },
+      "FeedList": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Feed"
+        }
+      },
+      "FeedDetail": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Feed"
+          }
+        ]
+      },
+      "Post": {
+        "required": [
+          "description",
+          "feed",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 0
+          },
+          "title": {
+            "type": "string",
+            "example": "A captivating title"
+          },
+          "description": {
+            "type": "string",
+            "example": "This is a nice message"
+          },
+          "feed": {
+            "type": "string",
+            "example": "https://rss.robbevanherck.be/feeds/0"
+          },
+          "link": {
+            "type": "string",
+            "example": "https://example.com/captivating"
+          },
+          "read": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "PostList": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Post"
+        }
+      }
+    }
+  }
+}
