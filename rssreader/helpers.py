@@ -42,3 +42,12 @@ def accept(func_or_mimetype=None):
     if func_or_mimetype is not None:
         mimetype = func_or_mimetype
     return Accept
+
+def error(description, status=400, asJSON=True):
+    if asJSON:
+        return jsonify({
+            'status': status,
+            'name': http.HTTPStatus(status).phrase,
+            'detail': description
+            }), status
+    return render_template("error.html", status=status, description=description)
