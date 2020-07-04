@@ -1,8 +1,11 @@
 import functools
 
+import json
+
 from flask import Flask, render_template, jsonify, request, Response
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from werkzeug.exceptions import HTTPException
 
 from rssreader.helpers import accept
 
@@ -14,9 +17,25 @@ db = SQLAlchemy(app)
 
 from rssreader.models import Feed
 
-@app.errorhandler(404)
-def not_found(error):
-    return render_template('404.html', error=error), 404
+@app.errorhandler(HTTPException)
+@accept
+def handle_exception(e):
+    return e
+
+@app.errorhandler(HTTPException)
+@handle_exception.accept('application/json')
+def handle_exception_json(e):
+    """Return JSON instead of HTML for HTTP errors."""
+    # start with the correct headers and status code from the error
+    response = e.get_response()
+    # replace the body with JSON
+    response.data = json.dumps({
+        "status": e.code,
+        "name": e.name,
+        "description": e.description,
+    })
+    response.content_type = "application/json"
+    return response
 
 @app.route('/', methods=['GET'])
 @accept
@@ -49,8 +68,29 @@ def feeds_json():
         db.session.commit()
         return jsonify(feed.json())
 
+@app.route('/feeds/<int:feedId>')
+@accept
+def feed_by_id(feedId):
+    feed = Feed.query.get(feedId)
+    if feed is None:
+        return error("The feed could not be found", 404, False)
+    return render_template("todo.html")
 
-def error(description, status=400):
-    return Response(description, status=status)
+@feed_by_id.accept('application/json')
+def feed_by_id_json(feedId):
+    if request.method == 'GET':
+        feed = Feed.query.get(feedId)
+        if feed is None:
+            return error("The feed could not be found", 404)
+        return jsonify(feed.json())
+
+
+def error(description, status=400, asJSON=True):
+    if asJSON:
+        return jsonify({
+            'status': status,
+            'detail': description
+            }), status
+    return render_template("error.html", status=status, description=description)
 
 db.create_all()
