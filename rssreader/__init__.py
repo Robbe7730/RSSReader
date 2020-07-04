@@ -75,28 +75,31 @@ def feeds_json():
 def feed_by_id(feedId):
     if request.method != "GET":
         return error("With the given content-type, only GET is allowed", asJSON=False)
-    feed = Feed.query.get(feedId)
-    if feed is None:
-        return error("The feed could not be found", 404, False)
+    feed = Feed.query.get_or_404(feedId)
     return render_template("todo.html")
 
 @feed_by_id.accept('application/json')
 def feed_by_id_json(feedId):
-    feed = Feed.query.get(feedId)
-    if feed is None:
-        return error("The feed could not be found", 404)
+    feed = Feed.query.get_or_404(feedId)
     if request.method == 'GET':
         return jsonify(feed.json())
     elif request.method == 'DELETE':
-        try:
-            db.session.delete(feed)
-            db.session.commit()
-        except:
-            db.session.rollback()
-            return error("A database error occurred", 500)
+        db.session.delete(feed)
+        db.session.commit()
         return "", 204
-        
-
+    elif request.method == 'PATCH':
+        patch = request.json
+        if "name" in patch:
+            feed.name = patch["name"]
+        if "description" in patch:
+            feed.description = patch["description"]
+        if "priority" in patch:
+            feed.priority = patch["priority"]
+        if "hidden" in patch:
+            feed.hidden = patch["hidden"]
+        db.session.add(feed)
+        db.session.commit()
+        return jsonify(feed.json())
 
 def error(description, status=400, asJSON=True):
     if asJSON:
