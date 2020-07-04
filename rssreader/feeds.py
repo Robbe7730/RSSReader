@@ -63,3 +63,14 @@ def feed_by_id_json(feedId):
         db.session.add(feed)
         db.session.commit()
         return jsonify(feed.json())
+
+@bp.route('/<int:feedId>/posts', methods=["GET"])
+@accept
+def posts_for_feed(feedId):
+    feed = Feed.query.get_or_404(feedId)
+    return render_template("todo.html")
+
+@posts_for_feed.accept('application/json')
+def posts_for_feed_json(feedId):
+    feed = Feed.query.get_or_404(feedId)
+    return jsonify([post.json() for post in feed.posts])
