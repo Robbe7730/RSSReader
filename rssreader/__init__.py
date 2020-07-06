@@ -54,5 +54,7 @@ def create_app():
         import rssreader.feeds as feeds
         app.register_blueprint(feeds.bp)
 
-    return app
+        import rssreader.posts as posts
+        app.register_blueprint(posts.bp)
 
+    return app

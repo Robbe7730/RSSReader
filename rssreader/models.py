@@ -1,7 +1,3 @@
-"""
-models.py: The SQLAlchemy models
-"""
-
 from rssreader import get_db
 
 db = get_db()
@@ -34,7 +30,17 @@ class Post(db.Model):
     description = db.Column(db.String(1024), nullable=False)
     link = db.Column(db.String(128), nullable=True)
     read = db.Column(db.Boolean, default=False)
-    feed = db.Column(db.Integer, db.ForeignKey('feed.id'))
+    feed = db.Column(db.Integer, db.ForeignKey('feed.id'), nullable=False)
 
     def __repr__(self):
         return '<Post %r>' % self.title
+
+    def json(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "description": self.description,
+            "link": self.link,
+            "read": self.read,
+            "feed": self.feed
+        }

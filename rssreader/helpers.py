@@ -1,5 +1,6 @@
 import functools
-from flask import request
+import http
+from flask import request, jsonify
 
 def accept(func_or_mimetype=None):
     """
