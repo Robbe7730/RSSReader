@@ -137,9 +137,6 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-# Config file
-config.py
-
 # PyCharm data
 .idea
 
