@@ -2,24 +2,18 @@ import functools
 
 import json
 
-from flask import Flask, render_template, jsonify, g
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, render_template, jsonify, g, current_app
 from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
 from werkzeug.exceptions import HTTPException
 
 from rssreader.helpers import accept
 
-def get_db():
-    return g.db
-
-def create_db(app):
-    g.db = SQLAlchemy(app)
-    g.db.create_all()
+db = SQLAlchemy()
 
 def create_app():
-
     app = Flask(__name__)
-    app.config.from_object('config')
+    app.config.from_pyfile('config.py')
     CORS(app)
 
     @app.errorhandler(HTTPException)
@@ -49,12 +43,14 @@ def create_app():
         return jsonify({})
 
     with app.app_context():
-        create_db(app)
 
-        import rssreader.feeds as feeds
+        from rssreader import feeds
+        from rssreader import posts
+
         app.register_blueprint(feeds.bp)
-
-        import rssreader.posts as posts
         app.register_blueprint(posts.bp)
+
+        db.init_app(app)
+        db.create_all()
 
     return app

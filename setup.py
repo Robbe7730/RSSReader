@@ -12,11 +12,12 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/Robbe7730/RSSReader",
-    packages=setuptools.find_packages(),
+    packages=['rssreader'],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
+    package_data={'rssreader': ['templates/*', 'static/*']},
 )

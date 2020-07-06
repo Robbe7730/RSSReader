@@ -1,7 +1,3 @@
-"""
-Run the Flask rssreader
-"""
-
 from rssreader import create_app
 
 app = create_app()

@@ -1,13 +1,10 @@
-from rssreader import get_db
-
+from rssreader import db
 from rssreader.models import Feed
 from rssreader.helpers import accept, error
 
 from flask import render_template, request, Blueprint, jsonify
 
 bp = Blueprint('feeds', __name__, url_prefix='/feeds')
-
-db = get_db()
 
 @bp.route('/', methods=['GET', 'POST'])
 @accept

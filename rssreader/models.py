@@ -1,6 +1,4 @@
-from rssreader import get_db
-
-db = get_db()
+from rssreader import db
 
 class Feed(db.Model):
     __tablename__ = 'feed'

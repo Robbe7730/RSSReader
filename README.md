@@ -4,13 +4,9 @@ You can find the OpenAPI 3.0 specification under `docs/`
 
 ## Dev Setup
 
-### 1. Create a `config.py`
+### 1. Create a `config.py` under rssreader/
 
 ```python
-"""
-Configuration for the Flask app
-"""
-
 # Define the application directory
 import os
 
