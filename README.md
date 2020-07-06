@@ -1,6 +1,6 @@
 # Backend for an RSS reader that is yet to be named
 
-You can find the OpenAPI 3.0 and Swagger 3.0 specification under `docs/`
+You can find the OpenAPI 3.0 specification under `docs/`
 
 ## Dev Setup
 
