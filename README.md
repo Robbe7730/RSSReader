@@ -53,3 +53,7 @@ virtualenv -p python3 venv
 ```bash
 python run.py
 ```
+
+## Testing
+
+Test can be run with `tox`. Tests are currently ran on python 3.8 (see tox.ini)
