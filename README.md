@@ -8,6 +8,7 @@
 
 ```bash
 su postgres
+cd postgrest
 createdb api
 psql < postgrest.sql
 ```
@@ -15,7 +16,7 @@ psql < postgrest.sql
 ### 3. Start postgrest
 
 ```bash
-postgrest postgrest.conf
+postgrest postgrest/postgrest.conf
 ```
 
 ### 4. Find the backend on http://0.0.0.0:3000
