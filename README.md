@@ -1,6 +1,13 @@
 # RSS reader that is yet to be named
 
-## Development Setup
+## Development setup (with make)
+
+```bash
+make db # If the db needs to be created
+make
+```
+
+## Manual Setup
 
 ### Postgrest
 
